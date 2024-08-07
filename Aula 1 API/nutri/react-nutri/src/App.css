@@ -45,5 +45,14 @@ a{
 
 .titulo-conteudo{
   font-size: 25px;
+}
 
+img{
+  width: 750px;
+  height: 500px;
+}
+
+footer{
+  text-align: center;
+  color: white;
 }
