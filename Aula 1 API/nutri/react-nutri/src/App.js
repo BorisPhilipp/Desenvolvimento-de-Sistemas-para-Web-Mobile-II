@@ -40,6 +40,8 @@ function App(){
             );
           })}
       </div>
+
+      <footer>Direitos Reservados - 2024 &copy;</footer>
     </div>
   );
 }
