@@ -1,4 +1,5 @@
 import React, { useEffect, useState} from 'react';
+import './App.css';
 
 function App(){
   const [nutri, setNutri] = useState([]);
@@ -12,21 +13,33 @@ function App(){
   }, []);
 
   return(
-    <div>
-      <header>
-        <strong>React Nutri</strong>
-      </header>
+    <div className='fundo'>
+      <div className='secao-principal'>
+        <header className='secao-header'>
+          <strong>React-Nutri</strong>
+          <li className='lista-direita'>
+            <a href=''><ul>Entrar |</ul></a>
+            <a href=''><ul>Noticias |</ul></a>
+            <a href=''><ul>Contato</ul></a>
+          </li>
+        </header>
 
-      {nutri.map((item)=>{
-        return(
-          <article key={item.id}>
-            <strong>{item.titulo}</strong>
-            <img src={item.capa} alt={item.titulo}/>
-            <p>{item.subtitulo}</p>
-            <button>Acessar</button>
-          </article>
-        );
-      })}
+
+        {nutri.map((item)=>{
+            return(
+              <div className='secao-pagina'>
+                <article key={item.id} className='secao-conteudo'>
+                  <u><strong className='titulo-conteudo'>{item.titulo}</strong></u>
+                  <br/>
+                  <img src={item.capa} alt={item.titulo}/>
+                  <p>{item.subtitulo}</p>
+                  <br/>
+                  <button>Acessar</button>
+                </article>
+              </div>  
+            );
+          })}
+      </div>
     </div>
   );
 }
