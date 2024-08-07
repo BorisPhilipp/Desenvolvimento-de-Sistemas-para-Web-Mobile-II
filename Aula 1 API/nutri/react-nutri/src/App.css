@@ -1,38 +1,49 @@
-.App {
-  text-align: center;
+*{
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  box-sizing: border-box;
+  /* background-color: rgb(6, 90, 13); */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.fundo{
+  background-color: rgb(6, 90, 13);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.secao-header{
+  background: green;
+  padding: 17px;
+  color: #fff;
+  letter-spacing: 3px;
+  font-style: oblique;
+  list-style-type: none;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.lista-direita{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  list-style: none;
+  float: right;
 }
 
-.App-link {
-  color: #61dafb;
+a{
+  color: #fff;
+  text-decoration: none;
+  padding-left: 7px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.secao-pagina{
+  background-color: rgb(220, 236, 175);
+  margin: 17px;
+  border-radius: 5px;
+  padding: 15px 15px;
+}
+
+.secao-pagina img{
+  border-radius: 10px;
+}
+
+.titulo-conteudo{
+  font-size: 25px;
+
 }
