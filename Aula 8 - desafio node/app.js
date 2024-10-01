@@ -4,14 +4,14 @@ const path = require("path")
 const porta = 8080;
 
 console.log(`http://localhost:${porta}`);
+console.log("Faça seu Login!");
+
 
 http.createServer(function(req, res){
     if(req.url === "/"){
         fs.readFile("index.html", function(err, data){
             res.writeHead(200, {"Content-Type": "text/html"});
-            if (err){
-                res.end("Erro na pagina de login!");
-            } else {
+            if (data){
                 res.end(data);
             }
         });
@@ -32,9 +32,12 @@ http.createServer(function(req, res){
         res.writeHead(200,{ "content-type": "text/html"});
         res.end("<h1>Bem-vindo a Pagina Inicial!</h1>");
     } else {
-        res.writeHead(404, {"Content-Type": "text/html"});
-        res.end("<h1>Pagina não encontrada</h1>");
-        console.log("Erro 404: alguma coisa esta errada")
+        fs.readFile("erro.html", function(err,data){
+            if(data){
+                res.writeHead(333, {"Content-Type": "text/html"});
+                res.end(data);
+            }
+        })
     }
 
 }).listen(porta);
