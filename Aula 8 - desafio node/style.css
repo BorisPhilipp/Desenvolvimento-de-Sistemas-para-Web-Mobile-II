@@ -1,0 +1,99 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    background-image: linear-gradient(#e0e0e0, #f3f3f3);
+    height: 100vh;
+}
+
+header{
+    display: flex;
+    background-color: cornflowerblue;
+    height: 60px;
+    align-items: center;
+}
+
+header h2{
+    color: rgb(245, 245, 245);
+    margin-left: 20px;
+}
+
+
+main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px);
+}
+
+.container-login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: 500px;
+    background-color: #e2e2e2;
+    border-radius: 10px;
+    box-shadow: 3px 3px 10px 10px #cecece;
+}
+
+.container-login h1{
+    display: flex;
+    justify-content: center;
+    color: cornflowerblue;
+}
+
+form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input{
+    height: 40px;
+    width: 250px;
+    border-radius: 4px;
+    padding: 5px;
+    margin-top: 10px;
+    border: 0px;
+}
+
+button{
+    width: 100px;
+    background-color: cornflowerblue;
+    padding: 8px;
+    color: #ddd;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 20px;
+    border: 0px;
+    cursor: pointer;
+}
+
+.forgot{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.forgot p{
+    color: cornflowerblue;
+    margin-right: 10px;
+}
+
+.forgot a{
+    color: darkorange;
+}
+
+.downloads{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.downloads img{
+    height: 35px;
+    margin: 10px;
+}
