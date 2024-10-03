@@ -78,13 +78,13 @@ app.listen(3030, () =>{
 
 /*ex 4 -const url = req.url.split('/');
 
-  if ( url[1] === 'salutation' && url.length === 3) {
+  if ( url[1] === 'saudacao' && url.length === 3) {
 
-    const name = url[2];
+    const usuario = url[2];
 
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.writeHead(200, {'Content-Type': 'text/html'});
 
-    res.end(`Hello ${name}!`);
+    res.end(`<h1>Hello ${usuario}!</h1>`);
 
   }
 */
