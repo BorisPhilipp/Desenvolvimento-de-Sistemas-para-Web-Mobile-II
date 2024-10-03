@@ -1,52 +1,75 @@
-//importar fs (readline-sync)
+//importar express
 
 const http = require('http');
-const read = require('fs')
-const aleatorio = require('./utils.js')
-console.log(aleatorio.rand)
+const aleatorio = require('./utils.js');
+const nome1 = 'Giovane';
+const nome2 = 'Karina';
+const express = require('express');
+const app = express();
+const dado = require('./dados.json');
 
+
+// "corpo" do server
 const requestListener = function(req, res){
-    if(req.url === '/'){
-        res.writeHead(200, {'Content-type': 'text/html'});
-        res.end('<h1>Bem-vindo!</h1><br><h1>Voce esta na Home.</h1>')
-    } else if(req.url === '/sobre') {
-        res.writeHead(200, {'Content-type': 'text/html'});
-        res.end('<h1>Sobre</h1><h1>Luigi Dominicano</h1>')
+    if(req.url === '/'){ //Exercicio 1 - Criar um servidor básico com Node.js
+
+        res.writeHead(200, { 'Content-type': 'text/html; charset=utf8'}); //content-type altera a padronização de texto (plain, html, css)
+        res.end('<h1>Bem-vindo!</h1><br><h1>Você está na Home.</h1><br><p>Por favor teste /sobre, /contato, /numero,<br>/saudacao/Giovane, /saudacao/Karina e localhost:3030/, /api/data, /api/data2.</p>');
+
+    } else if(req.url === '/sobre') { //Exercicio 2 - Implementar múltiplas rotas básicas
+        
+        res.writeHead(200, {'Content-type': 'text/html; charset=utf8'});
+        res.end('<h1>Sobre</h1><h1>Luigi Dominicano</h1>');
+
     } else if(req.url === '/contato') {
-        res.writeHead(200, {'Content-type': 'text/html'});
-        res.end('<h1>Contato</h1><h1>Making mofongo</h1>')
-    } else if(req.url === '/numero') {
-        res.writeHead(200 , {'Content-type': 'text/html'});
-        res.end(`Seu numero e ${aleatorio.rand().toString()}`)
-    }else {
-        res.writeHead(404);
-        res.end("<h1>Página não encontrada</h1>");
+
+        res.writeHead(200, {'Content-type': 'text/html; charset=utf8'}); //charset=utf8 faz com que seja habilitado a funcionalidade de usar acentos.
+        res.end('<h1>Contato</h1><h1>Making mofongo</h1>');
+
+    } else if(req.url === '/numero') { //Exercicio 3 - Utilizar modulos personalizados
+
+        res.writeHead(200 , {'Content-type': 'text/html; charset=utf8'});
+        res.end(`<h1>Seu número é ${aleatorio.rand().toString()}!</h1>`);
+
+    } else if(req.url === `/saudacao/${nome1}`) { //Exercicio 4 - Implementar rotas parametrizadas
+
+        res.writeHead(200 , {'Content-type': 'text/html; charset=utf8'});
+        res.end(`<h1> Olá, ${nome1}!</h1><br><h2>Por favor teste /saudacao/Karina! (note o K maiusculo)</h2><br>`);
+
+    } else if(req.url === `/saudacao/${nome2}`) { //Exercicio 4 - Extra pq sim.
+
+        res.writeHead(200 , {'Content-type': 'text/html; charset=utf8'});
+        res.end(`<h1> Olá, ${nome2}!</h1><br><h2>Por favor teste /saudacao/Giovane! (note o G maiusculo)</h2>`);
+
+    } else {
+
+        res.writeHead(404, {'Content-type': 'text/html; charset=utf8'});
+        res.end("<h1>Página não encontrada!</h1>");
+
     }
 }
 
+//"abrindo" o server.
 const server = http.createServer(requestListener);
-
 server.listen(8000, 'localhost', ()=> {
-    console.log("Servidor está rodando em http://localhost:8000");
+    console.log("Servidor está rodando em http://localhost:8000 utilizando o http.");
 })
 
 
-/*
-Exercício 4: Implementar rotas parametrizadas
-Crie um servidor que responda com uma saudação personalizada quando acessado por
-uma URL como "/saudacao/seu_nome". Por exemplo, "/saudacao/joao" deve responder
-com "Olá, João!".
-Pontos-chave:
-● Usar parâmetros na rota
-● Extrair informações da URL para personalizar a resposta
+app.get('/', (req, res) =>{ //Exercicio 5 - Criar um servidor Express básico
+    res.send('<h1>Olá mundo, feito usando servidor Express.</h1><br><h2>Por favor teste /api/data e /api/data2.</h2>');
+})
 
-Exercício 5: Criar um servidor Express básico
-Usando o framework Express, crie um servidor que tenha duas rotas:
-● "/" - Responder com uma página HTML simples
-● "/api/data" - Responder com um objeto JSON contendo informações básicas sobre
-você
-Pontos-chave:
-● Instalar e configurar o Express
-● Usar o Express para gerenciar rotas
-● Responder com diferentes tipos de conteúdo (HTML e JSON)
-*/
+app.get('/api/data', (req, res) =>{ //api/data utilizando HTML
+    res.set("Content-type", "text/html")
+    res.send(`<h1>Nome: ${dado.nome}</h1>
+                <h2>Idade: ${dado.idade}</h2>`)
+})
+
+app.get('/api/data2', (req, res) =>{//api/data2 json puro (não sei se era pra fazer assim.)
+    res.send(dado);
+})
+
+app.listen(3030, () =>{
+    console.log(`Servidor está rodando em http://localhost:3030 utilizando o express.`)
+})
