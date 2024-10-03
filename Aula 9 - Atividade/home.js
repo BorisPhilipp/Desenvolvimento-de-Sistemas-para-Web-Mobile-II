@@ -73,18 +73,5 @@ app.get('/api/data2', (req, res) =>{//api/data2 json puro (não sei se era pra f
 app.listen(3030, () =>{
     console.log(`Servidor está rodando em http://localhost:3030 utilizando o express.`)
 })
-
-
-
-/*ex 4 -const url = req.url.split('/');
-
-  if ( url[1] === 'saudacao' && url.length === 3) {
-
-    const usuario = url[2];
-
-    res.writeHead(200, {'Content-Type': 'text/html'});
-
-    res.end(`<h1>Hello ${usuario}!</h1>`);
-
   }
 */
