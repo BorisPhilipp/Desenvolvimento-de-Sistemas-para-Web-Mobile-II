@@ -31,7 +31,7 @@ const requestListener = function(req, res){
         res.writeHead(200 , {'Content-type': 'text/html; charset=utf8'});
         res.end(`<h1>Seu número é ${aleatorio.rand().toString()}!</h1>`);
 
-    } else if(req.url === `/saudacao/${nome1}`) { //Exercicio 4 - Implementar rotas parametrizadas
+    } else if(req.url === `/saudacao/${nome1}`) { //Exercicio 4 - Implementar rotas parametrizadas, acho que era assim para fazer
 
         res.writeHead(200 , {'Content-type': 'text/html; charset=utf8'});
         res.end(`<h1> Olá, ${nome1}!</h1><br><h2>Por favor teste /saudacao/Karina! (note o K maiusculo)</h2><br>`);
