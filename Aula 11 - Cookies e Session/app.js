@@ -51,10 +51,20 @@ app.get('/login', (req,res) => {
         `);
 });
 
-
 //Rota de Dashboard
 app.get('/dashboard', isAuthenticaded, (req,res) => {
-    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3>`);
+    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3><br><a href="/logout">LogOut</a>`);
+});
+
+// Rota de logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Erro ao tentar fazer logout.');
+        }
+        res.clearCookie('loggedIn');
+        res.redirect('/login'); // Redireciona para a página de login
+    });
 });
 
 
@@ -93,7 +103,7 @@ Passo a passo para resolver o exercício:
 
 1 - Instalar as dependências necessárias. -feito
 2 - Configurar o servidor Express.  -feito
-3 - Implementar rotas básicas.  -feito, /, /login e /dashboard
+3 - Implementar rotas básicas.  -feito, /, /login, /logout e /dashboard
 4 - Adicionar suporte a sessions. -feito
 5 - Implementar rota de login.  -feito
 6 - Implementar rota de logout.  -nao
