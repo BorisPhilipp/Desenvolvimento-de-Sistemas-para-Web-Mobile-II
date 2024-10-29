@@ -1,3 +1,5 @@
+//npm i express express-session cookie-parser
+
 //importando express e cookie-parser, express-session
 const express = require('express');
 
@@ -8,74 +10,63 @@ const cookieParser = require('cookie-parser');
 //inicializar express
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
+
 
 app.use(session(
     {
         secret: 'admin123', //chave para acessar os cookies
         resave: false, //evita gravar sessões sem alterações
-        saveUninitialized: true //salvar na guia anônima
+        saveUninitialized: true, //salvar na guia anônima
+        cookie: { secure: false }
     }
 ));
 
-//dados de exemplos
-const produtos = [
-    {id:1, nome: 'Alface', preco: 2},
-    {id:2, nome: 'Pashmina', preco: 70},
-    {id:3, nome: 'Pastel', preco: 6}
-];
-
-app.get('/produtos', (req,res) =>{
-    res.send(`
-        
-        <h1>Lista de Produtos</h1>
-        <ul>
-
-            ${
-                produtos.map((produto) => `
-                    <li>${produto.nome} - ${produto.preco} <a href="/adicionar/${produto.id}">Adicionar ao Carrinho</a></li>
-                `).join('')
-            }
-
-        </ul>
-        <a href="/carrinho">Ver Carrinho</a>
-    `);
-});
-
-//rota de adicionar produto
-app.get('/adicionar/:id', (req,res) => {
-    const id = parseInt(req.params.id);
-
-    const produto = produtos.find((p)=> p.id === id);
-
-    if(produto) {
-        if(!req.session.carrinho){
-            req.session.carrinho = [];
-        }
-        req.session.carrinho.push(produto);
+//Middleware de autenticação
+function isAuthenticaded(req, res, next){
+    if (req.session.isAuthenticaded){
+        return next();
     }
+    res.redirect('/login');
+}
 
-    res.redirect('/produtos');
+app.get('/', (req,res) => {
+    res.send('<h1>HOME</h1><br><h3>Digite /login, após localhost:8080.</h3>');
 });
 
-//rota do carrinho
-app.get('/carrinho', (req, res) => {
-    const carrinho = req.session.carrinho || [];
-
+app.get('/login', (req,res) => {
     res.send(`
-        
-        <h1>Carrinho</h1>
-        <ul>
+        <form method="POST" action="/login">
+            <input type="text" name="username" placeholder="Usuário" required />
+            <input type="password" name="password" placeholder="Senha" required />
+            <button type="submit">Login</button>
+        </form>
+        `);
+});
 
-            ${
-                carrinho.map((produto) => `
-                    <li>${produto.nome} - ${produto.preco}</li>
-                `).join('')
-            }
+app.get('/dashboard', isAuthenticaded, (req,res) => {
+    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3>`);
+});
 
-        </ul>
-        <a href="/produtos">Continuar Comprando</a>
-    `);
-})
+app.post('/login', (req,res) => {
+    const {username, password} = req.body;
+
+    //Simulação de verificação de credenciais.
+    if(username === 'admin' && password === '123'){
+        req.session.isAuthenticaded = true;
+        req.session.username = username;
+
+
+        //Setando um cookie
+        res.cookie('loggedIn','true',{ maxAge: 900000, httpOnly: true});
+
+        res.redirect('/dashboard');
+    } else{
+        res.send('<h1>Credenciais inválidas</h1><a href="/login">Tente novamente</a>');
+    }
+});
 
 app.listen(8080);
+console.log("Servidor aberto em 8080.");
