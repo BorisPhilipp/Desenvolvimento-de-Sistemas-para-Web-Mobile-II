@@ -18,7 +18,7 @@ app.listen(8080); //2 - Configurar o servidor Express.
 /*
 Requisitos:
 
-° Criar um servidor web básico usando Express.
+° Criar um servidor web básico usando Express.a
 ° Implementar rotas para login e logout.
 ° Usar cookies para armazenar informações do usuário.
 ° Utilizar sessions para manter o estado de autenticação.
