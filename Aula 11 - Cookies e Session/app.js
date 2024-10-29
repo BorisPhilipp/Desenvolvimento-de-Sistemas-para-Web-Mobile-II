@@ -10,7 +10,9 @@ const cookieParser = require('cookie-parser');
 //inicializar express
 const app = express();
 
+//Middleware de análise de corpo.
 app.use(express.urlencoded({ extended: true }));
+
 
 app.use(cookieParser());
 
@@ -32,10 +34,13 @@ function isAuthenticaded(req, res, next){
     res.redirect('/login');
 }
 
+//Rota de Home
 app.get('/', (req,res) => {
     res.send('<h1>HOME</h1><br><h3>Digite /login, após localhost:8080.</h3>');
 });
 
+
+//Rota de Login 
 app.get('/login', (req,res) => {
     res.send(`
         <form method="POST" action="/login">
@@ -46,9 +51,12 @@ app.get('/login', (req,res) => {
         `);
 });
 
+
+//Rota de Dashboard
 app.get('/dashboard', isAuthenticaded, (req,res) => {
     res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3>`);
 });
+
 
 app.post('/login', (req,res) => {
     const {username, password} = req.body;
@@ -68,6 +76,7 @@ app.post('/login', (req,res) => {
     }
 });
 
+//Ativação de Servidor
 app.listen(8080);
 console.log("Servidor aberto em 8080.");
 
