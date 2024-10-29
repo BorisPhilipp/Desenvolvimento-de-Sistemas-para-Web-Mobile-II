@@ -70,3 +70,24 @@ app.post('/login', (req,res) => {
 
 app.listen(8080);
 console.log("Servidor aberto em 8080.");
+
+/*
+Requisitos:
+
+° - Criar um servidor web básico usando Express.
+° - Implementar rotas para login e logout.
+° - Usar cookies para armazenar informações do usuário.
+° - Utilizar sessions para manter o estado de autenticação.
+° - Criar uma página protegida que só pode ser acessada por usuários autenticados.
+
+Passo a passo para resolver o exercício:
+
+1 - Instalar as dependências necessárias.
+2 - Configurar o servidor Express.
+3 - Implementar rotas básicas.
+4 - Adicionar suporte a sessions.
+5 - Implementar rota de login.
+6 - Implementar rota de logout.
+7 - Criar rota protegida.
+8 - Implementar middleware de autenticação.
+*/
