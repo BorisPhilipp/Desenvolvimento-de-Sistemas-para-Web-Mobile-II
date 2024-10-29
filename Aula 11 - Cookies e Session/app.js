@@ -82,12 +82,12 @@ Requisitos:
 
 Passo a passo para resolver o exercício:
 
-1 - Instalar as dependências necessárias.
-2 - Configurar o servidor Express.
-3 - Implementar rotas básicas.
-4 - Adicionar suporte a sessions.
-5 - Implementar rota de login.
-6 - Implementar rota de logout.
-7 - Criar rota protegida.
-8 - Implementar middleware de autenticação.
+1 - Instalar as dependências necessárias. -feito
+2 - Configurar o servidor Express.  -feito
+3 - Implementar rotas básicas.  -feito, /, /login e /dashboard
+4 - Adicionar suporte a sessions. -feito
+5 - Implementar rota de login.  -feito
+6 - Implementar rota de logout.  -nao
+7 - Criar rota protegida.  -feito, /dashboard
+8 - Implementar middleware de autenticação.  -feito
 */
