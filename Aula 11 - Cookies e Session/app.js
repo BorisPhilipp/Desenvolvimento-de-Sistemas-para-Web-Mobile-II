@@ -1,5 +1,3 @@
-//npm i express express-session cookie-parser
-
 //importando express e cookie-parser, express-session
 const express = require('express');
 
@@ -10,103 +8,74 @@ const cookieParser = require('cookie-parser');
 //inicializar express
 const app = express();
 
-//Middleware de análise de corpo.
-app.use(express.urlencoded({ extended: true }));
-
-
 app.use(cookieParser());
-
 
 app.use(session(
     {
         secret: 'admin123', //chave para acessar os cookies
         resave: false, //evita gravar sessões sem alterações
-        saveUninitialized: true, //salvar na guia anônima
-        cookie: { secure: false }
+        saveUninitialized: true //salvar na guia anônima
     }
 ));
 
-//Middleware de autenticação
-function isAuthenticaded(req, res, next){
-    if (req.session.isAuthenticaded){
-        return next();
-    }
-    res.redirect('/login');
-}
+//dados de exemplos
+const produtos = [
+    {id:1, nome: 'Alface', preco: 2},
+    {id:2, nome: 'Pashmina', preco: 70},
+    {id:3, nome: 'Pastel', preco: 6}
+];
 
-//Rota de Home
-app.get('/', (req,res) => {
-    res.send('<h1>HOME</h1><br><h3>Digite /login, após localhost:8080.</h3>');
-});
-
-
-//Rota de Login 
-app.get('/login', (req,res) => {
+app.get('/produtos', (req,res) =>{
     res.send(`
-        <form method="POST" action="/login">
-            <input type="text" name="username" placeholder="Usuário" required />
-            <input type="password" name="password" placeholder="Senha" required />
-            <button type="submit">Login</button>
-        </form>
-        `);
+        
+        <h1>Lista de Produtos</h1>
+        <ul>
+
+            ${
+                produtos.map((produto) => `
+                    <li>${produto.nome} - ${produto.preco} <a href="/adicionar/${produto.id}">Adicionar ao Carrinho</a></li>
+                `).join('')
+            }
+
+        </ul>
+        <a href="/carrinho">Ver Carrinho</a>
+    `);
 });
 
-//Rota de Dashboard
-app.get('/dashboard', isAuthenticaded, (req,res) => {
-    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3><br><a href="/logout">LogOut</a>`);
-});
+//rota de adicionar produto
+app.get('/adicionar/:id', (req,res) => {
+    const id = parseInt(req.params.id);
 
-// Rota de logout
-app.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).send('Erro ao tentar fazer logout.');
+    const produto = produtos.find((p)=> p.id === id);
+
+    if(produto) {
+        if(!req.session.carrinho){
+            req.session.carrinho = [];
         }
-        res.clearCookie('loggedIn');
-        res.redirect('/login'); // Redireciona para a página de login
-    });
-});
-
-
-app.post('/login', (req,res) => {
-    const {username, password} = req.body;
-
-    //Simulação de verificação de credenciais.
-    if(username === 'admin' && password === '123'){
-        req.session.isAuthenticaded = true;
-        req.session.username = username;
-
-
-        //Setando um cookie
-        res.cookie('loggedIn','true',{ maxAge: 900000, httpOnly: true});
-
-        res.redirect('/dashboard');
-    } else{
-        res.send('<h1>Credenciais inválidas</h1><a href="/login">Tente novamente</a>');
+        req.session.carrinho.push(produto);
     }
+
+    res.redirect('/produtos');
 });
 
-//Ativação de Servidor
+//rota do carrinho
+app.get('/carrinho', (req, res) => {
+    const carrinho = req.session.carrinho || [];
+
+    res.send(`
+        
+        <h1>Carrinho</h1>
+        <ul>
+
+            ${
+                carrinho.map((produto) => `
+                    <li>${produto.nome} - ${produto.preco}</li>
+                `).join('')
+            }
+
+        </ul>
+        <a href="/produtos">Continuar Comprando</a>
+    `);
+})
+
 app.listen(8080);
-console.log("Servidor aberto em 8080.");
-
-/*
-Requisitos:
-
-° - Criar um servidor web básico usando Express.
-° - Implementar rotas para login e logout.
-° - Usar cookies para armazenar informações do usuário.
-° - Utilizar sessions para manter o estado de autenticação.
-° - Criar uma página protegida que só pode ser acessada por usuários autenticados.
-
-Passo a passo para resolver o exercício:
-
-1 - Instalar as dependências necessárias. -feito
-2 - Configurar o servidor Express.  -feito
-3 - Implementar rotas básicas.  -feito, /, /login, /logout e /dashboard
-4 - Adicionar suporte a sessions. -feito
-5 - Implementar rota de login.  -feito
-6 - Implementar rota de logout.  -nao
-7 - Criar rota protegida.  -feito, /dashboard
-8 - Implementar middleware de autenticação.  -feito
-*/
