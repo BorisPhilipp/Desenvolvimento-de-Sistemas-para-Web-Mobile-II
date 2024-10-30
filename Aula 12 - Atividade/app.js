@@ -1,37 +1,112 @@
-const express = require('express')
+//npm i express express-session cookie-parser
+
+//importando express e cookie-parser, express-session
+const express = require('express');
+
+//cookies e sessions
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+
+//inicializar express
 const app = express();
 
-app.get('/', (req,res) =>{
-    res.send("<h1>TESTE</h1>");
-})
-
-app.get('/dashboard', (req,res) =>{
-    res.send("<h1>Dashboard</h1>");
-})
+//Middleware de análise de corpo.
+app.use(express.urlencoded({ extended: true }));
 
 
+app.use(cookieParser());
 
 
-app.listen(8080); //2 - Configurar o servidor Express.
+app.use(session(
+    {
+        secret: 'admin123', //chave para acessar os cookies
+        resave: false, //evita gravar sessões sem alterações
+        saveUninitialized: true, //salvar na guia anônima
+        cookie: { secure: false }
+    }
+));
+
+//Middleware de autenticação
+function isAuthenticaded(req, res, next){
+    if (req.session.isAuthenticaded){
+        return next();
+    }
+    res.redirect('/login');
+}
+
+//Rota de Home
+app.get('/', (req,res) => {
+    res.send('<h1>HOME</h1><br><h3>Digite /login, após localhost:8080.</h3>');
+});
+
+
+//Rota de Login 
+app.get('/login', (req,res) => {
+    res.send(`
+        <form method="POST" action="/login">
+            <input type="text" name="username" placeholder="Usuário" required />
+            <input type="password" name="password" placeholder="Senha" required />
+            <button type="submit">Login</button>
+        </form>
+        `);
+});
+
+//Rota de Dashboard
+app.get('/dashboard', isAuthenticaded, (req,res) => {
+    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3><br><a href="/logout">LogOut</a>`);
+});
+
+// Rota de logout
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Erro ao tentar fazer logout.');
+        }
+        res.clearCookie('loggedIn');
+        res.redirect('/login'); // Redireciona para a página de login
+    });
+});
+
+
+app.post('/login', (req,res) => {
+    const {username, password} = req.body;
+
+    //Simulação de verificação de credenciais.
+    if(username === 'admin' && password === '123'){
+        req.session.isAuthenticaded = true;
+        req.session.username = username;
+
+
+        //Setando um cookie
+        res.cookie('loggedIn','true',{ maxAge: 900000, httpOnly: true});
+
+        res.redirect('/dashboard');
+    } else{
+        res.send('<h1>Credenciais inválidas</h1><a href="/login">Tente novamente</a>');
+    }
+});
+
+//Ativação de Servidor
+app.listen(8080);
+console.log("Servidor aberto em 8080.");
+
 /*
 Requisitos:
 
-° Criar um servidor web básico usando Express.a
-° Implementar rotas para login e logout.
-° Usar cookies para armazenar informações do usuário.
-° Utilizar sessions para manter o estado de autenticação.
-° Criar uma página protegida que só pode ser acessada por usuários autenticados.
+° - Criar um servidor web básico usando Express.
+° - Implementar rotas para login e logout.
+° - Usar cookies para armazenar informações do usuário.
+° - Utilizar sessions para manter o estado de autenticação.
+° - Criar uma página protegida que só pode ser acessada por usuários autenticados.
 
 Passo a passo para resolver o exercício:
 
-1 - Instalar as dependências necessárias. O
-2 - Configurar o servidor Express. O
-3 - Implementar rotas básicas. +-
-4 - Adicionar suporte a sessions.
-5 - Implementar rota de login.
-6 - Implementar rota de logout.
-7 - Criar rota protegida.
-8 - Implementar middleware de autenticação.
+1 - Instalar as dependências necessárias. -feito
+2 - Configurar o servidor Express.  -feito
+3 - Implementar rotas básicas.  -feito, /, /login, /logout e /dashboard
+4 - Adicionar suporte a sessions. -feito
+5 - Implementar rota de login.  -feito
+6 - Implementar rota de logout.  -nao
+7 - Criar rota protegida.  -feito, /dashboard
+8 - Implementar middleware de autenticação.  -feito
 */
