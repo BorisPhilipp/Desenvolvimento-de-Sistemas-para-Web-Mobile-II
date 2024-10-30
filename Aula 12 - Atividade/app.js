@@ -2,20 +2,16 @@
 
 //importando express e cookie-parser, express-session
 const express = require('express');
-
-//cookies e sessions
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 //inicializar express
 const app = express();
 
-//Middleware de análise de corpo.
+//middleware que processa REQUEST BODIES codificadas na url
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use(cookieParser());
-
 
 app.use(session(
     {
@@ -26,7 +22,7 @@ app.use(session(
     }
 ));
 
-//Middleware de autenticação
+//middleware que verifica se o usuário está autenticado através do session
 function isAuthenticaded(req, res, next){
     if (req.session.isAuthenticaded){
         return next();
@@ -34,29 +30,35 @@ function isAuthenticaded(req, res, next){
     res.redirect('/login');
 }
 
-//Rota de Home
+//rota 1 - Homepage (Default)
 app.get('/', (req,res) => {
-    res.send('<h1>HOME</h1><br><h3>Digite /login, após localhost:8080.</h3>');
+    res.send('<h1>HOME</h1><h2>Insira \'/login\' na URL para prosseguir!</h2><p>Ou clique <a href="http://localhost:8080/login">aqui</a>! :)</p>');
 });
 
 
-//Rota de Login 
+//rota 2 - Login 
 app.get('/login', (req,res) => {
-    res.send(`
+    res.send(`<h1>LOGIN</h1>
+        <h2>Realize o Login com uma Conta ou Use: admin 123</h2>
         <form method="POST" action="/login">
-            <input type="text" name="username" placeholder="Usuário" required />
-            <input type="password" name="password" placeholder="Senha" required />
+            <label>Insira o Nome de Usuário</label></br>
+            <input type="text" name="username" placeholder="Usuário" required /></br></br>
+            <label>Insira a Senha</label></br>
+            <input type="password" name="password" placeholder="Senha" required /></br></br>
             <button type="submit">Login</button>
         </form>
         `);
 });
 
-//Rota de Dashboard
+//rota 3 - Dashboard
 app.get('/dashboard', isAuthenticaded, (req,res) => {
-    res.send(`<h1>Dashboard</h1><h3>Bem vindo, ${req.session.username}!</h3><br><a href="/logout">LogOut</a>`);
+    res.send(`<h1>Dashboard</h1>
+        <h3>Bem vindo, ${req.session.username}!</h3>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Rick Astley - Never Gonna Give You Up (Video)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></br></br>
+        <p>Ou se preferir, clique aqui para <a href="/logout">sair</a>!</p>`);
 });
 
-// Rota de logout
+//rota 4 - Logout
 app.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
@@ -67,26 +69,26 @@ app.get('/logout', (req, res) => {
     });
 });
 
-
+//rota 5 - Requisição POST do Formulário da Rota 2 (Login)
 app.post('/login', (req,res) => {
+    //propriedade que armazena os dados da requisição POST
     const {username, password} = req.body;
 
-    //Simulação de verificação de credenciais.
+    //validação das credenciais de usuário com as do administrador.
     if(username === 'admin' && password === '123'){
         req.session.isAuthenticaded = true;
         req.session.username = username;
 
-
-        //Setando um cookie
+        //geração de um cookie que carrega o status de login do usuário
         res.cookie('loggedIn','true',{ maxAge: 900000, httpOnly: true});
 
         res.redirect('/dashboard');
-    } else{
+    } else {
         res.send('<h1>Credenciais inválidas</h1><a href="/login">Tente novamente</a>');
     }
 });
 
-//Ativação de Servidor
+//subindo o servidor
 app.listen(8080);
 console.log("Servidor aberto em 8080.");
 
