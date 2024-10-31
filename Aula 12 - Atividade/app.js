@@ -108,7 +108,7 @@ Passo a passo para resolver o exercício:
 3 - Implementar rotas básicas.  -feito, /, /login, /logout e /dashboard
 4 - Adicionar suporte a sessions. -feito
 5 - Implementar rota de login.  -feito
-6 - Implementar rota de logout.  -nao
+6 - Implementar rota de logout.  -feito
 7 - Criar rota protegida.  -feito, /dashboard
 8 - Implementar middleware de autenticação.  -feito
 */
