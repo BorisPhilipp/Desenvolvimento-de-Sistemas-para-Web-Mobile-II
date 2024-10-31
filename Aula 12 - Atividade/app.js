@@ -1,5 +1,7 @@
 //npm i express express-session cookie-parser
 
+//Dupla - Boris Philipp Weber Da Luz e João Vinicius Yuji Nakano.
+
 //importando express e cookie-parser, express-session
 const express = require('express');
 const session = require('express-session');
